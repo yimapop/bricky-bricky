@@ -1,2 +1,1 @@
-
 window.onload = () => Game.init()

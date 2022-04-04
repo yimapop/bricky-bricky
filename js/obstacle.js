@@ -1,7 +1,6 @@
 class Obstacle {
-    constructor(ctx, gameSize, posX, posY, width, height, speed) {
+    constructor(ctx, posX, posY, width, height, speed) {
         this.ctx = ctx
-        this.gameSize = gameSize
         this.obstaclePos = {x: posX = 1300, y: posY = 600}
         this.obstacleSize = {w: width = 100, h: height = 100}
         this.speed = speed
