@@ -12,8 +12,8 @@ class Platform {
 
 
     drawPlatform() {
-        // this.ctx.fillRect(this.platformPos.x, this.platformPos.y, this.platformSize.w, this.platformSize.h, this.speed)
-        this.ctx.fillRect(this.platformPos.x, this.platformPos.y, this.platformSize.w, this.platformSize.h, this.speed)
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(this.platformPos.x, this.platformPos.y, this.platformSize.w, this.platformSize.h)
 
         this.move()
     }

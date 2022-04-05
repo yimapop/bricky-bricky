@@ -1,21 +1,26 @@
 class Obstacle {
     constructor(ctx, posX, posY, width, height, speed) {
         this.ctx = ctx
-        this.obstaclePos = {x: posX = 1300, y: posY = 600}
-        this.obstacleSize = {w: width = 100, h: height = 100}
+        this.obstaclePos = {
+            x: posX,
+            y: posY,
+        }
+        this.obstacleSize = {
+            w: width,
+            h: height,
+        }
         this.speed = speed
         this.obstacleInstance = undefined
-
-
 
     }
 
 
     drawObstacle() {
-        this.ctx.fillRect(this.obstaclePos.x, this.obstaclePos.y, this.obstacleSize.w, this.obstacleSize.h, this.speed)
+        this.ctx.fillStyle = 'black'
+        this.ctx.fillRect(this.obstaclePos.x, this.obstaclePos.y, this.obstacleSize.w, this.obstacleSize.h)
         this.move()
 
-        }
+    }
 
     move() {
         this.obstaclePos.x -= this.speed
