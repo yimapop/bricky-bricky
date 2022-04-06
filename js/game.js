@@ -1,3 +1,7 @@
+
+// boton de start igual que en el coche
+
+
 const Game = {
     name: 'Bricky Bricky',
     description: 'Videogame',
@@ -11,16 +15,19 @@ const Game = {
     obstacle: [],
     frameIndex: 0,
     background: undefined,
+    sound: undefined,
 
     init() {
         this.canvas = document.getElementById("canvas")
         this.ctx = this.canvas.getContext("2d")
-
+        this.imageGameOver = new Image()
+        this.imageGameOver.src = './js/image/game_over.png'
         this.setDimensions()
         this.setListener()
         this.reset()
         this.createPlayer()
         this.start()
+
 
     },
 
@@ -33,13 +40,15 @@ const Game = {
 
 
     setDimensions() {
-        this.gameSize = { w: 1400, h: 700 },
+        this.gameSize = { w: 1400, h: 800 },
             this.canvas.setAttribute('width', this.gameSize.w)
         this.canvas.setAttribute('height', this.gameSize.h)
     },
 
     createPlatform() {
-        this.platform.push(new Platform(this.ctx, 1500, 500, 200, 50, 3))
+        this.platform.push(new Platform(this.ctx, 1500, 500, 200, 50, 5))
+        this.platform.push(new Platform(this.ctx, 2000, 300, 200, 50, 5))
+
 
 
         // const platformHeight = Math.random() * this.gameSize.h * 0.35 + this.gameSize.h * 0.25
@@ -54,7 +63,8 @@ const Game = {
     },
 
     createPlayer() {
-        this.player = new Player(this.ctx, 100, 500, 120, 120, 1)
+        //this.ctx.lineWidth = 100
+        this.player = new Player(this.ctx, 100, 1000, 120, 120)
 
 
     },
@@ -63,11 +73,11 @@ const Game = {
         // let randomPlatform = Math.floor(Math.random() * this.gameSize.w)
 
         this.bigPlatform.push(new BigPlatform(this.ctx, 1500, 0, 150, 200, 3))
-        this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 500, 150, 200, 3))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 600, 150, 200, 3))
     },
 
     createObstacle() {
-        this.obstacle.push(new Obstacle(this.ctx, 1300, 600, 100, 100, 3))
+        this.obstacle.push(new Obstacle(this.ctx, 1300, 700, 100, 100, 3))
 
     },
 
@@ -77,6 +87,7 @@ const Game = {
     },
 
     drawAll() {
+        this.sound.play()
         this.background.draw()
         this.drawSquare()
         this.platform.forEach(elm => elm.drawPlatform())
@@ -104,19 +115,26 @@ const Game = {
             this.frameIndex % 200 === 0 ? this.createObstacle() : null
 
             this.clearAll()
+
             this.drawAll()
             this.drawPlayer()
             this.obstacleCollision()
             this.bigCollision()
-            //this.platformCollision()
+            this.platformCollision()
             // console.log('what happens', this.platformCollision())
+
             this.frameIndex++
         }, 30)
 
+        this.sound = new Audio("./js/sound.mp3/tsunami2.mp3")
+        sound.play()
+
+
     },
 
+
     reset() {
-        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/background.jpeg")
+        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/city.jpeg")
     },
 
     clearAll() {
@@ -139,32 +157,30 @@ const Game = {
 
     },
 
-    // platformCollision() {
+    platformCollision() {
+
+        this.platform.forEach(elem => {
+            if (this.player.playerPos.x < elem.platformPos.x + elem.platformSize.w &&
+                this.player.playerPos.x + this.player.playerSize.w > elem.platformPos.x &&
+                this.player.playerPos.y < elem.platformPos.y + elem.platformSize.h &&
+                this.player.playerSize.h + this.player.playerPos.y > elem.platformPos.y) {
+                this.player.speed = 0
+            }
+        })
+    },
 
 
-    //     if (this.player.playerPos.x < this.platformPos.x + this.platformSize.w &&
-    //         this.player.playerPos.x + this.player.playerSize.w > this.platformPos.x &&
-    //         this.player.playerPos.y < this.platformPos.y + this.platformSize.h &&
-    //         this.player.playerSize.h + this.player.playerPos.y > this.platformPos.y) {
-    //         this.player.speed = 0
-    //     }
 
 
     //     // if (this.player.playerPos.y + this.player.playerSize.h >= this.platform.platformPos.y) {
-    //     // } this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.h
-    // },
+    //     // } this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.
+
 
 
     // (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight)
 
     bigCollision() {
 
-        // if (this.player.playerPos.x < this.platformPos.x + this.platformSize.w &&
-        //     this.player.playerPos.x + this.player.playerSize.w > this.platformPos.x &&
-        //     this.player.playerPos.y < this.platformPos.y + this.platformSize.h &&
-        //     this.player.playerSize.h + this.player.playerPos.y > this.platformPos.y) {
-        //     this.player.speed = 0
-        // }
 
         this.bigPlatform.forEach(bigplat => {
             if (this.player.playerPos.x < bigplat.bigPlatformPos.x + bigplat.bigPlatformSize.w &&
@@ -177,26 +193,30 @@ const Game = {
             }
 
 
-
-            //if (this.player.playerPos.y + this.player.playerSize.h >= this.platform.platformPos.y) {
-            //} this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.h
-
-
         })
 
     },
 
 
+    drawEnd() {
 
-    // if(rect1.x < rect2.x + rect2.width &&
-    //     rect1.x + rect1.width > rect2.x &&
-    //     rect1.y < rect2.y + rect2.height &&
-    //     rect1.height + rect1.y > rect2.y)
+        this.ctx.drawImage(this.imageGameOver, 0, 0)
+        // this.gameOver = new GameOver(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/game_over.jpg")
+        // this.ctx.fillStyle = 'yellow'
+        // this.ctx.font = '150px arial'
+        // this.ctx.fillText(`GAME OVER`, this.gameSize.w / 2 - 450, this.gameSize.w / 2 - 300)
+
+
+    },
 
     gameOver() {
+        // cambiar el background o la imagen para q no sea el juego
         clearInterval(this.interval)
+        this.drawEnd()
+        this.sound.pause()
 
-    }
+    },
+
 
 
 
