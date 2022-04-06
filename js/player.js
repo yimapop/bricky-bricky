@@ -1,21 +1,13 @@
 class Player {
-    constructor(ctx, posX, posY, width, height) {
+    constructor(ctx, posX, posY, width, height, speed) {
         this.ctx = ctx
-        this.playerPos = {
-            x: posX,
-            y: posY,
-        }
-        this.playerSize = {
-            w: width,
-            h: height,
-        }
-        this.speed = 1
+        this.playerPos = {x: posX, y: posY}
+        this.playerSize = {w: width, h: height}
+        
+        this.speed = speed
         // this.gameSize = undefined
-        this.playerInstance = undefined
-        this.keyPress
+        //this.playerInstance = undefined
         this.floor = 580
-
-
         this.gravity = 0.5
 
 

@@ -10,6 +10,7 @@ const Game = {
     bigPlatform: [],
     obstacle: [],
     frameIndex: 0,
+    background: undefined,
 
     init() {
         this.canvas = document.getElementById("canvas")
@@ -17,17 +18,11 @@ const Game = {
 
         this.setDimensions()
         this.setListener()
-        this.createObstacle()
-        this.createPlatform()
-        this.createBigPlatform()
-        // this.randomPlatformY()
+        this.reset()
         this.createPlayer()
         this.start()
-        this.collisions()
 
     },
-
-
 
     setListener() {
         document.addEventListener('keydown', event => {
@@ -37,33 +32,38 @@ const Game = {
     },
 
 
-
     setDimensions() {
-        this.gameSize = { w: 1300, h: 700 },
+        this.gameSize = { w: 1400, h: 700 },
             this.canvas.setAttribute('width', this.gameSize.w)
         this.canvas.setAttribute('height', this.gameSize.h)
     },
 
     createPlatform() {
-        let randomPlatformY = Math.floor(Math.random() * this.gameSize.w - 200)
-        this.platform.push(new Platform(this.ctx, 1200, randomPlatformY + 300, 200, 50, 3))
+        this.platform.push(new Platform(this.ctx, 1500, 500, 200, 50, 3))
 
+
+        // const platformHeight = Math.random() * this.gameSize.h * 0.35 + this.gameSize.h * 0.25
+        // this.platform.push(new Platform(this.ctx, Math.random() * this.gameSize.h * .75 * ((this.gameSize.h - platformHeight / this.gameSize.h) + (this.gameSize.h * 0.085), 0, platformHeight, this.gameSize.h)))
+        // console.log(platformHeight)
+
+
+        // let randomPlatform = Math.floor(Math.random() * this.gameSize.w - 175)
+        // this.platform.push(new Platform(this.ctx, 500 , randomPlatform, 200, 50, 3))
 
 
     },
 
     createPlayer() {
-        this.player = new Player(this.ctx, 100, 500, 120, 120)
-        // this.player.jump()
-        //this.player.jumpReturn()
+        this.player = new Player(this.ctx, 100, 500, 120, 120, 1)
+
 
     },
 
     createBigPlatform() {
-        //let randomPlatformY = Math.floor(Math.random() * this.gameSize.w - 200)
+        // let randomPlatform = Math.floor(Math.random() * this.gameSize.w)
 
-        this.bigPlatform.push(new BigPlatform(this.ctx, 1800, 0, 150, 350, 3))
-
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1500, 0, 150, 200, 3))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 500, 150, 200, 3))
     },
 
     createObstacle() {
@@ -71,29 +71,22 @@ const Game = {
 
     },
 
-    // randomPlatformY() {
-    //     cc
-    //     this.platform.push(new Platform(this.ctx, this.platformPos.x, randomPlatformY, 200, 50, 3))
-    // },
-
     drawPlayer() {
         this.player.drawPlayer()
 
     },
 
     drawAll() {
+        this.background.draw()
         this.drawSquare()
         this.platform.forEach(elm => elm.drawPlatform())
         this.bigPlatform.forEach(elm => elm.drawBigPlatform())
         this.obstacle.forEach(elm => elm.drawObstacle())
-        // this.randomPlatform.forEach(elm => elm.randomPlatformY())
-
-
 
         this.bigPlatform.forEach(elm => elm.move())
         this.platform.forEach(elm => elm.move())
         this.obstacle.forEach(elm => elm.move())
-        //this.player.forEach(elm => elm.move())
+
     },
 
 
@@ -104,20 +97,26 @@ const Game = {
     },
 
     start() {
+
         this.interval = setInterval(() => {
-            this.frameIndex % 120 === 0 ? this.createPlatform() : null
+            this.frameIndex % 230 === 0 ? this.createPlatform() : null
             this.frameIndex % 220 === 0 ? this.createBigPlatform() : null
             this.frameIndex % 200 === 0 ? this.createObstacle() : null
 
             this.clearAll()
-            this.drawPlayer()
             this.drawAll()
-            this.collisions()
+            this.drawPlayer()
+            this.obstacleCollision()
             this.bigCollision()
-
+            //this.platformCollision()
+            // console.log('what happens', this.platformCollision())
             this.frameIndex++
         }, 30)
 
+    },
+
+    reset() {
+        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/background.jpeg")
     },
 
     clearAll() {
@@ -125,15 +124,8 @@ const Game = {
     },
 
 
+    obstacleCollision() {
 
-
-    collisions() {
-        //console.log(this.obstacle)
-        // console.log(this.player)
-
-        // let obstacleFound = false
-
-        // console.log(this.bigPlatform)
 
         this.obstacle.forEach(obs => {
             if (this.player.playerPos.x < obs.obstaclePos.x + obs.obstacleSize.w &&
@@ -142,20 +134,37 @@ const Game = {
                 this.player.playerSize.h + this.player.playerPos.y > obs.obstaclePos.y) {
 
                 this.gameOver()
-
-                //obstacleFound = true
             }
         })
 
-        //return obstacleFound
-
     },
 
+    // platformCollision() {
+
+
+    //     if (this.player.playerPos.x < this.platformPos.x + this.platformSize.w &&
+    //         this.player.playerPos.x + this.player.playerSize.w > this.platformPos.x &&
+    //         this.player.playerPos.y < this.platformPos.y + this.platformSize.h &&
+    //         this.player.playerSize.h + this.player.playerPos.y > this.platformPos.y) {
+    //         this.player.speed = 0
+    //     }
+
+
+    //     // if (this.player.playerPos.y + this.player.playerSize.h >= this.platform.platformPos.y) {
+    //     // } this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.h
+    // },
+
+
+    // (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight)
+
     bigCollision() {
-        //console.log(this.bigPlatform)
 
-        //let obstacleFound = false
-
+        // if (this.player.playerPos.x < this.platformPos.x + this.platformSize.w &&
+        //     this.player.playerPos.x + this.player.playerSize.w > this.platformPos.x &&
+        //     this.player.playerPos.y < this.platformPos.y + this.platformSize.h &&
+        //     this.player.playerSize.h + this.player.playerPos.y > this.platformPos.y) {
+        //     this.player.speed = 0
+        // }
 
         this.bigPlatform.forEach(bigplat => {
             if (this.player.playerPos.x < bigplat.bigPlatformPos.x + bigplat.bigPlatformSize.w &&
@@ -163,15 +172,21 @@ const Game = {
                 this.player.playerPos.y < bigplat.bigPlatformPos.y + bigplat.bigPlatformSize.h &&
                 this.player.playerSize.h + this.player.playerPos.y > bigplat.bigPlatformPos.y) {
 
-                // obstacleFound = true
                 this.gameOver()
                 console.log('COLISIOOOON')
             }
-        })
-        //return obstacleFound
 
+
+
+            //if (this.player.playerPos.y + this.player.playerSize.h >= this.platform.platformPos.y) {
+            //} this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.h
+
+
+        })
 
     },
+
+
 
     // if(rect1.x < rect2.x + rect2.width &&
     //     rect1.x + rect1.width > rect2.x &&
