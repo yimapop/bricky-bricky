@@ -21,7 +21,10 @@ const Game = {
         this.canvas = document.getElementById("canvas")
         this.ctx = this.canvas.getContext("2d")
         this.imageGameOver = new Image()
-        this.imageGameOver.src = './js/image/game_over.png'
+        this.imageGameOver.src = './js/image/game_over_2.png'
+        this.initialGame = new Image()
+        this.initialGame.src = './js/image/initial_game.png'
+
         this.setDimensions()
         this.setListener()
         this.reset()
@@ -46,8 +49,8 @@ const Game = {
     },
 
     createPlatform() {
-        this.platform.push(new Platform(this.ctx, 1500, 500, 200, 50, 5))
-        this.platform.push(new Platform(this.ctx, 2000, 300, 200, 50, 5))
+        this.platform.push(new Platform(this.ctx, 1500, 480, 200, 40, 5.5))
+        this.platform.push(new Platform(this.ctx, 2000, 360, 200, 40, 6))
 
 
 
@@ -72,12 +75,12 @@ const Game = {
     createBigPlatform() {
         // let randomPlatform = Math.floor(Math.random() * this.gameSize.w)
 
-        this.bigPlatform.push(new BigPlatform(this.ctx, 1500, 0, 150, 200, 3))
-        this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 600, 150, 200, 3))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1500, 0, 150, 200, 4.5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 600, 150, 200, 4.5))
     },
 
     createObstacle() {
-        this.obstacle.push(new Obstacle(this.ctx, 1300, 700, 100, 100, 3))
+        this.obstacle.push(new Obstacle(this.ctx, 1300, 700, 100, 100, 3.8))
 
     },
 
@@ -124,7 +127,7 @@ const Game = {
             // console.log('what happens', this.platformCollision())
 
             this.frameIndex++
-        }, 30)
+        }, 25)
 
         this.sound = new Audio("./js/sound.mp3/tsunami2.mp3")
         sound.play()
@@ -134,7 +137,7 @@ const Game = {
 
 
     reset() {
-        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/city.jpeg")
+        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/neon.jpeg")
     },
 
     clearAll() {
@@ -171,14 +174,6 @@ const Game = {
 
 
 
-
-    //     // if (this.player.playerPos.y + this.player.playerSize.h >= this.platform.platformPos.y) {
-    //     // } this.player.playerPos.y = this.platform.platformPos.y + this.player.playerSize.
-
-
-
-    // (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight)
-
     bigCollision() {
 
 
@@ -201,6 +196,8 @@ const Game = {
     drawEnd() {
 
         this.ctx.drawImage(this.imageGameOver, 0, 0)
+        
+        
         // this.gameOver = new GameOver(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/game_over.jpg")
         // this.ctx.fillStyle = 'yellow'
         // this.ctx.font = '150px arial'

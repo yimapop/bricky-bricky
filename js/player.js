@@ -5,10 +5,10 @@ class Player {
         this.playerSize = { w: width, h: height }
 
         this.speed = speed
-        // this.gameSize = undefined
+        this.gameSize = this.gameSize
         //this.playerInstance = undefined
         this.floor = 680
-        this.gravity = 0.5
+        this.gravity = 0.4
 
 
 
@@ -21,7 +21,7 @@ class Player {
         // this.jumpUp = true
 
         // ANIMACIÓN ROTACIÓN PLAYER
-        // this.spin = 0
+        this.spin = 0
         // GRADOS ROTACIÓN 
         // this.spinIncrement = 90 / 32
 
@@ -39,8 +39,10 @@ class Player {
     }
 
     jump() {
-        this.playerPos.y -= 120
-        this.speed -= 12
+        this.playerPos.y -= 90
+        this.speed -= 9
+        if (this.playerPos.y = this.gameSize.h)
+            this.speed = 0
 
     }
 
@@ -48,7 +50,9 @@ class Player {
         if (this.playerPos.y < this.floor) {
             this.playerPos.y += this.speed
             this.speed += this.gravity
-        } else {
+        // } else if (this.gameSize.x < this.playerPos.y) {
+        //     this.speed = 0
+        }   else  {
             this.playerPos.y = this.floor
             this.speed = 1
         }
