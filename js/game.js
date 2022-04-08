@@ -1,7 +1,4 @@
 
-// boton de start igual que en el coche
-
-
 const Game = {
     name: 'Bricky Bricky',
     description: 'Videogame',
@@ -16,6 +13,12 @@ const Game = {
     frameIndex: 0,
     background: undefined,
     sound: undefined,
+    player: undefined,
+
+    playerScore: 0,
+
+    successJump: false,
+    playerJump: false,
 
     init() {
         this.canvas = document.getElementById("canvas")
@@ -23,12 +26,11 @@ const Game = {
         this.imageGameOver = new Image()
         this.imageGameOver.src = './js/image/game_over_2.png'
         this.initialGame = new Image()
-        this.initialGame.src = './js/image/initial_game.png'
-
+        this.initialGame.src = './js/image/initial_game_2.png'
         this.setDimensions()
+        this.createPlayer()
         this.setListener()
         this.reset()
-        this.createPlayer()
         this.start()
 
 
@@ -37,7 +39,11 @@ const Game = {
     setListener() {
         document.addEventListener('keydown', event => {
             const { key } = event
-            key === ' ' ? this.player.jump() : null
+            if (key === ' ') {
+                this.player.jump()
+                this.playerJump = true
+
+            }
         })
     },
 
@@ -49,38 +55,42 @@ const Game = {
     },
 
     createPlatform() {
-        this.platform.push(new Platform(this.ctx, 1500, 480, 200, 40, 5.5))
-        this.platform.push(new Platform(this.ctx, 2000, 360, 200, 40, 6))
-
-
-
-        // const platformHeight = Math.random() * this.gameSize.h * 0.35 + this.gameSize.h * 0.25
-        // this.platform.push(new Platform(this.ctx, Math.random() * this.gameSize.h * .75 * ((this.gameSize.h - platformHeight / this.gameSize.h) + (this.gameSize.h * 0.085), 0, platformHeight, this.gameSize.h)))
-        // console.log(platformHeight)
-
-
-        // let randomPlatform = Math.floor(Math.random() * this.gameSize.w - 175)
-        // this.platform.push(new Platform(this.ctx, 500 , randomPlatform, 200, 50, 3))
+        // this.platform.push(new Platform(this.ctx, 0, 750, 1400, 50, 0))
+        this.platform.push(new Platform(this.ctx, 2500, 400, 150, 10, 5.5))
+        this.platform.push(new Platform(this.ctx, 2000, 360, 200, 10, 6))
+        this.platform.push(new Platform(this.ctx, 1000, 200, 150, 10, 6.5))
+        this.platform.push(new Platform(this.ctx, 900, 100, 150, 10, 7))
+        this.platform.push(new Platform(this.ctx, 2000, 550, 350, 10, 7.5))
 
 
     },
 
     createPlayer() {
-        //this.ctx.lineWidth = 100
-        this.player = new Player(this.ctx, 100, 1000, 120, 120)
+        this.player = new Player(this.ctx, 100, 1000, 140, 80, 50, this.gameSize.w, this.gameSize.h)
 
 
     },
 
     createBigPlatform() {
-        // let randomPlatform = Math.floor(Math.random() * this.gameSize.w)
 
-        this.bigPlatform.push(new BigPlatform(this.ctx, 1500, 0, 150, 200, 4.5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1500, -10, 150, 200, 4.5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1400, -10, 150, 200, 5.5))
         this.bigPlatform.push(new BigPlatform(this.ctx, 2000, 600, 150, 200, 4.5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1000, 500, 100, 100, 5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 1000, 500, 200, 100, 5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 900, 500, 200, 100, 5.5))
+        this.bigPlatform.push(new BigPlatform(this.ctx, 800, 500, 50, 50, 5.5))
     },
 
     createObstacle() {
-        this.obstacle.push(new Obstacle(this.ctx, 1300, 700, 100, 100, 3.8))
+        this.obstacle.push(new Obstacle(this.ctx, 4000, 0, 200, 80, 3))
+        this.obstacle.push(new Obstacle(this.ctx, 4000, 0, 200, 80, 3.5))
+        this.obstacle.push(new Obstacle(this.ctx, 900, 700, 100, 100, 3.8))
+        this.obstacle.push(new Obstacle(this.ctx, 1300, 580, 300, 100, 4))
+        this.obstacle.push(new Obstacle(this.ctx, 1200, 580, 300, 100, 4.5))
+        this.obstacle.push(new Obstacle(this.ctx, 1000, 400, 50, 50, 5.5))
+        this.obstacle.push(new Obstacle(this.ctx, 1000, 400, 90, 50, 5.5))
+        this.obstacle.push(new Obstacle(this.ctx, 2000, 700, 90, 50, 5.5))
 
     },
 
@@ -90,7 +100,6 @@ const Game = {
     },
 
     drawAll() {
-        this.sound.play()
         this.background.draw()
         this.drawSquare()
         this.platform.forEach(elm => elm.drawPlatform())
@@ -106,38 +115,56 @@ const Game = {
 
     drawSquare() {
         this.ctx.lineWidth = 2
+        this.ctx.strokeStyle = 'black'
         this.ctx.strokeRect(0, 0, this.gameSize.w, this.gameSize.h)
 
     },
 
     start() {
 
+        this.frameIndex = 0
+
         this.interval = setInterval(() => {
             this.frameIndex % 230 === 0 ? this.createPlatform() : null
             this.frameIndex % 220 === 0 ? this.createBigPlatform() : null
             this.frameIndex % 200 === 0 ? this.createObstacle() : null
-
             this.clearAll()
-
             this.drawAll()
             this.drawPlayer()
             this.obstacleCollision()
             this.bigCollision()
             this.platformCollision()
-            // console.log('what happens', this.platformCollision())
+            this.borderCollision()
+            this.drawScore(this.frameIndex)
 
             this.frameIndex++
-        }, 25)
 
-        this.sound = new Audio("./js/sound.mp3/tsunami2.mp3")
-        sound.play()
+        }, 23)
+
+        this.sound = new Audio("./js/sound.mp3/y1.mp3")
+        this.sound.play()
+
+    },
+
+    drawScore(counter) {
+        this.ctx.font = '50px Menlo'
+        this.ctx.fillStyle = 'white'
+        this.ctx.fillText("SCORE", 1140, 70)
+        this.ctx.font = '50px Menlo'
+        this.ctx.fillStyle = 'white'
+        this.ctx.fillText(Math.floor(counter / 30), 1330, 70)
+    },
 
 
+    borderCollision() {
+        if (0 > this.player.playerPos.y) {
+            this.player.playerPos.y = 3
+        }
     },
 
 
     reset() {
-        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/neon.jpeg")
+        this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/city_neon.jpg")
     },
 
     clearAll() {
@@ -147,7 +174,6 @@ const Game = {
 
     obstacleCollision() {
 
-
         this.obstacle.forEach(obs => {
             if (this.player.playerPos.x < obs.obstaclePos.x + obs.obstacleSize.w &&
                 this.player.playerPos.x + this.player.playerSize.w > obs.obstaclePos.x &&
@@ -155,6 +181,9 @@ const Game = {
                 this.player.playerSize.h + this.player.playerPos.y > obs.obstaclePos.y) {
 
                 this.gameOver()
+            } else {
+                this.successJump = true
+
             }
         })
 
@@ -173,7 +202,6 @@ const Game = {
     },
 
 
-
     bigCollision() {
 
 
@@ -184,7 +212,10 @@ const Game = {
                 this.player.playerSize.h + this.player.playerPos.y > bigplat.bigPlatformPos.y) {
 
                 this.gameOver()
-                console.log('COLISIOOOON')
+
+            } else {
+                this.successJump = true
+
             }
 
 
@@ -196,26 +227,15 @@ const Game = {
     drawEnd() {
 
         this.ctx.drawImage(this.imageGameOver, 0, 0)
-        
-        
-        // this.gameOver = new GameOver(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/game_over.jpg")
-        // this.ctx.fillStyle = 'yellow'
-        // this.ctx.font = '150px arial'
-        // this.ctx.fillText(`GAME OVER`, this.gameSize.w / 2 - 450, this.gameSize.w / 2 - 300)
-
 
     },
 
     gameOver() {
-        // cambiar el background o la imagen para q no sea el juego
         clearInterval(this.interval)
         this.drawEnd()
         this.sound.pause()
 
     },
-
-
-
 
 
 }

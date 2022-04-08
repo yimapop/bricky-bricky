@@ -1,14 +1,26 @@
+body {
+
+    background-color: black;
+}
+
 #canvas {
     margin: auto;
     display: block;
     text-align: center;
     margin-top: 50px;
-    /* background-color: greenyellow; */
+
+}
+
+#initial_img {
+
+    display: block;
+    margin: auto;
+    text-align: center;
+    padding-top: 50px;
 
 
 }
 
-body{
-
-    background-color: black;
+.hidden {
+    display: none;
 }

@@ -9,9 +9,9 @@ class Obstacle {
 
     }
 
-
     drawObstacle() {
-        this.ctx.fillStyle = 'green'
+        this.ctx.strokeStyle = 'pink'
+
         this.ctx.strokeRect(this.obstaclePos.x, this.obstaclePos.y, this.obstacleSize.w, this.obstacleSize.h)
         this.move()
 

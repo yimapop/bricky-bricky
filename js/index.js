@@ -1,13 +1,11 @@
-window.onload = () => Game.init()
 
-    startGame()
+const portada = document.querySelector('.portada')
+const canvas = document.querySelector('#canvas')
 
+portada.addEventListener('click', () => {
+    portada.classList.add('hidden')
+    canvas.classList.remove('hidden')
+    Game.init()
+})
 
-
-
-    function startGame() { }
-    function startGame() {
-        carGame.init()
-    }
-    
 
