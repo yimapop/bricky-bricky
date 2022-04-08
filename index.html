@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" type="image/png" sizes="16x16" href=".js/image/ms-icon-310x310.png">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +14,19 @@
 
     <!-- IMAGEN PORTADA -->
     <div class="portada">
-        <img id="initial_img" src="./js/image/game_initial.png" alt="">
+        <img id="initial_img" src="./js/image/bricky_neon.png" alt="">
     </div>
 
+    <!-- REPLAY -->
+    <div class="endScreen">
+        <div id="endScreenContent" alt=""></div>
+        <div id="btnReplay" class="button" onclick="replay()" PLAY AGAIN></div>
+
+    </div>
+
+
     <!-- CANVAS -->
-    <canvas id="canvas" class="hidden"></canvas>
+    <canvas id="canvas" width="1400" height="800" class="hidden"></canvas>
 
     <script src="./js/background.js"></script>
     <script src="./js/game.js"></script>

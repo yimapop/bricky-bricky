@@ -11,6 +11,8 @@ class Platform {
 
 
     drawPlatform() {
+        // this.ctx.shadowColor = 'red';
+        // this.ctx.shadowBlur = 30;
         this.ctx.fillStyle = 'white'
         this.ctx.fillRect(this.platformPos.x, this.platformPos.y, this.platformSize.w, this.platformSize.h)
 

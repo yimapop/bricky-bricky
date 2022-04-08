@@ -10,7 +10,8 @@ class BigPlatform {
     }
 
     drawBigPlatform() {
-
+        this.ctx.shadowColor = 'red';
+        this.ctx.shadowBlur = 20;
         this.ctx.lineWidth = 8
         this.ctx.strokeStyle = 'blue'
         this.ctx.strokeRect(this.bigPlatformPos.x, this.bigPlatformPos.y, this.bigPlatformSize.w, this.bigPlatformSize.h)

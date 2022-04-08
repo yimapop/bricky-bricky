@@ -10,6 +10,8 @@ class Obstacle {
     }
 
     drawObstacle() {
+        // this.ctx.shadowColor = 'red';
+        // this.ctx.shadowBlur = 30;
         this.ctx.strokeStyle = 'pink'
 
         this.ctx.strokeRect(this.obstaclePos.x, this.obstaclePos.y, this.obstacleSize.w, this.obstacleSize.h)

@@ -23,10 +23,10 @@ const Game = {
     init() {
         this.canvas = document.getElementById("canvas")
         this.ctx = this.canvas.getContext("2d")
-        this.imageGameOver = new Image()
-        this.imageGameOver.src = './js/image/game_over_2.png'
         this.initialGame = new Image()
         this.initialGame.src = './js/image/initial_game_2.png'
+        this.imageGameOver = new Image()
+        this.imageGameOver.src = './js/image/game_over_2.png'
         this.setDimensions()
         this.createPlayer()
         this.setListener()
@@ -55,7 +55,6 @@ const Game = {
     },
 
     createPlatform() {
-        // this.platform.push(new Platform(this.ctx, 0, 750, 1400, 50, 0))
         this.platform.push(new Platform(this.ctx, 2500, 400, 150, 10, 5.5))
         this.platform.push(new Platform(this.ctx, 2000, 360, 200, 10, 6))
         this.platform.push(new Platform(this.ctx, 1000, 200, 150, 10, 6.5))
@@ -114,6 +113,7 @@ const Game = {
 
 
     drawSquare() {
+
         this.ctx.lineWidth = 2
         this.ctx.strokeStyle = 'black'
         this.ctx.strokeRect(0, 0, this.gameSize.w, this.gameSize.h)
@@ -165,6 +165,7 @@ const Game = {
 
     reset() {
         this.background = new Background(this.ctx, this.gameSize.w, this.gameSize.h, "./js/image/city_neon.jpg")
+        clearInterval(this.interval)
     },
 
     clearAll() {
@@ -217,7 +218,6 @@ const Game = {
                 this.successJump = true
 
             }
-
 
         })
 
